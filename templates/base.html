@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Site{% endblock %}</title>
+    <style>
+        .user-info {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            text-align: right;
+        }
+        .user-info a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        .user-info form {
+            display: inline;
+            margin-left: 15px;
+        }
+        .user-info button {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- User Info Bar -->
+    <div class="user-info">
+        {% if user.is_authenticated %}
+            Welcome, <strong>{{ user.username }}</strong>!
+            <form action="{% url 'users:logout' %}" method='post'>
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'users:login' %}">Login</a>
+            <a href="{% url 'users:register' %}">Register</a>
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

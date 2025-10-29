@@ -1,0 +1,1 @@
+console.log("this is JS file! It is working!");

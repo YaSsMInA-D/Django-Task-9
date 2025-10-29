@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}People Database{% endblock %}
+
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+    
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 300;
+    }
+    
+    .header p {
+        opacity: 0.9;
+        font-size: 1.1em;
+    }
+    
+    .people-list {
+        padding: 30px;
+    }
+    
+    .person-item {
+        background: #f8f9fa;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border-left: 4px solid #3498db;
+        overflow: hidden;
+    }
+    
+    .person-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        background: #e3f2fd;
+    }
+    
+    .person-link {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        text-decoration: none;
+        color: #2c3e50;
+        font-size: 1.1em;
+        transition: color 0.3s ease;
+    }
+    
+    .person-link:hover {
+        color: #3498db;
+    }
+    
+    .person-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+        border: 3px solid #3498db;
+    }
+    
+    .person-info {
+        flex: 1;
+    }
+    
+    .person-name {
+        font-weight: 600;
+        font-size: 1.2em;
+        margin-bottom: 5px;
+    }
+    
+    .person-birth {
+        color: #7f8c8d;
+        font-size: 0.95em;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: #7f8c8d;
+    }
+    
+    .empty-state i {
+        font-size: 3em;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+    
+    .admin-link {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #e74c3c;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+    }
+    
+    .admin-link:hover {
+        background: #c0392b;
+    }
+    
+    .stats {
+        background: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #e9ecef;
+        color: #6c757d;
+    }
+    
+    @media (max-width: 600px) {
+        body {
+            padding: 20px 10px;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+        }
+        
+        .people-list {
+            padding: 20px;
+        }
+        
+        .person-image {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="header">
+        <h1>👥 People Database</h1>
+        <p>View all people in the system</p>
+    </div>
+    
+    <div class="people-list">
+        {% for person in persons %}
+            <div class="person-item">
+                <a href="{% url 'djangoapp:person' slug=person.slug %}" class="person-link">
+                    <!--  IMAGE  -->
+                    <img src="{{ person.profile_picture.url }}" alt="{{ person.name }}" class="person-image">
+                    
+                    <div class="person-info">
+                        <div class="person-name">{{ person.name }}</div>
+                        <div class="person-birth">🎂 Born: {{ person.birth }}</div>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <div class="empty-state">
+                <div>📝</div>
+                <h3>No people found</h3>
+                <p>Get started by adding people through the admin panel</p>
+                <a href="/admin/" class="admin-link">Go to Admin Panel</a>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <div class="stats">
+        Total People: {{ persons|length }}
+    </div>
+</div>
+{% endblock %}

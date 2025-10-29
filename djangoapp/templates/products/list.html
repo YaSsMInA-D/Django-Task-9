@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block title %}Products List{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        margin: 0;
+    }
+    
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .products-header {
+        text-align: center;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .products-header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 300;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .products-header p {
+        opacity: 0.9;
+        font-size: 1.1em;
+        font-weight: 300;
+    }
+    
+    .product-form {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+        text-align: left;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 1.1em;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: white;
+        font-family: inherit;
+    }
+    
+    .form-input:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        outline: none;
+        transform: translateY(-1px);
+    }
+    
+    .submit-btn {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        background: linear-gradient(135deg, #2980b9 0%, #2471a3 100%);
+    }
+    
+    .products-list {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .product-list {
+        display: grid;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .product-item {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #3498db;
+        transition: all 0.3s ease;
+    }
+    
+    .product-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        background: white;
+    }
+    
+    .product-name {
+        font-weight: bold;
+        font-size: 1.3em;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+    
+    .product-meta {
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
+    
+    .product-description {
+        color: #555;
+        line-height: 1.6;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 40px;
+        color: #7f8c8d;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 2px dashed #bdc3c7;
+    }
+    
+    .empty-state-icon {
+        font-size: 4em;
+        margin-bottom: 20px;
+        opacity: 0.7;
+    }
+    
+    .section-title {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+        body {
+            padding: 20px 10px;
+        }
+        
+        .products-header {
+            padding: 30px 20px;
+        }
+        
+        .products-header h1 {
+            font-size: 2em;
+        }
+        
+        .product-form, .products-list {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="container">
+    <!-- Header -->
+    <div class="products-header">
+        <h1>📦 Products Marketplace</h1>
+        <p>Add new products and browse existing ones</p>
+    </div>
+
+    <!-- Product Form -->
+    <div class="product-form">
+        <h2 class="section-title">➕ Add New Product</h2>
+        <form class="text-center" action="{% url 'djangoapp:product_list' %}" method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_name">🎯 Product Name</label>
+                <input type="text" name="name" id="id_name" required class="form-input" 
+                       placeholder="Enter product name (e.g., iPhone 15, Nike Shoes)">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_price">💰 Price ($)</label>
+                <input type="number" name="price" id="id_price" step="0.01" min="0" required 
+                       class="form-input" placeholder="0.00">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_description">📝 Description</label>
+                <textarea name="description" id="id_description" rows="4" class="form-input" 
+                          placeholder="Describe your product features, condition, and specifications..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_category">📁 Category</label>
+                <select name="category" id="id_category" required class="form-input">
+                    <option value="">Select a category</option>
+                    <option value="ELC">📱 Electronics</option>
+                    <option value="CLO">👕 Clothing</option>
+                    <option value="BOK">📚 Books</option>
+                    <option value="HOM">🏠 Home & Garden</option>
+                    <option value="OTH">📦 Other</option>
+                </select>
+            </div>
+            
+            <button class="submit-btn" type="submit">
+                🚀 Publish Your Product!
+            </button>
+        </form>
+    </div>
+
+    <!-- Products List -->
+    <div class="products-list">
+        <h2 class="section-title">📦 Recent Products ({{ product_list|length }})</h2>
+        
+        {% if product_list %}
+            <div class="product-list">
+                {% for product in product_list %}
+                <div class="product-item">
+                    <div class="product-name">{{ product.name }}</div>
+                    <div class="product-meta">
+                        💰 <strong style="color: #27ae60;">${{ product.price }}</strong> | 
+                        📁 <strong>{{ product.get_category_display }}</strong> | 
+                        👤 By: <strong>{{ product.user.username }}</strong> | 
+                        📅 {{ product.date_published|date:"M d, Y" }}
+                    </div>
+                    {% if product.description %}
+                    <p class="product-description">{{ product.description }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📦</div>
+                <h3 style="color: #7f8c8d; margin-bottom: 15px;">No Products Yet</h3>
+                <p style="color: #7f8c8d; font-size: 1.1em;">
+                    Be the first to add a product to the marketplace!<br>
+                    Use the form above to create your first listing.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

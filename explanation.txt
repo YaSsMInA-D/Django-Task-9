@@ -1,0 +1,17 @@
+What the register_view function does:
+
+When someone goes to the registration page:
+
+1. If they just opened the page:
+   - Show them an empty registration form
+
+2. If they filled the form and clicked submit (POST request):
+   - Check if the information is correct
+   - If everything is good: save the new user and go to home page
+   - If there are mistakes: show the form again with error messages
+
+What makes it work:
+- UserCreationForm: Ready-made form from Django for signing up
+- form.is_valid(): Checks if passwords match and are strong enough
+- form.save(): Puts the new user in the database
+- redirect(): Moves user to another page after success

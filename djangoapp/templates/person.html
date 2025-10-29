@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ person.name }} - Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+        
+        .person-details {
+            padding: 40px;
+        }
+        
+        .detail-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .detail-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .detail-value {
+            font-size: 1.2em;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #2980b9 0%, #2471a3 100%);
+        }
+        
+        .actions {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid #e9ecef;
+            background: #f8f9fa;
+        }
+        
+        .icon {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .profile-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .person-details {
+                padding: 25px;
+            }
+            
+            .detail-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            
+            <img src="{{ person.profile_picture.url }}" alt="{{ person.name }}" class="profile-image">
+            <h1>{{ person.name }}</h1>
+            <p>Personal Details</p>
+        </div>
+        
+        <div class="person-details">
+            <div class="detail-item">
+                <div class="detail-label">
+                    <span class="icon">🎂</span>
+                    Birth Date
+                </div>
+                <div class="detail-value">{{ person.birth }}</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">
+                    <span class="icon">🔗</span>
+                    Slug
+                </div>
+                <div class="detail-value">{{ person.slug }}</div>
+            </div>
+            
+            {% if person.description %}
+            <div class="detail-item">
+                <div class="detail-label">
+                    <span class="icon">📝</span>
+                    Description
+                </div>
+                <div class="detail-value">{{ person.description }}</div>
+            </div>
+            {% else %}
+            <div class="detail-item">
+                <div class="detail-label">
+                    <span class="icon">📝</span>
+                    Description
+                </div>
+                <div class="detail-value">No description available</div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="actions">
+            <a href="{% url 'djangoapp:home' %}" class="back-link">
+                <span class="icon">←</span>
+                Back to All People
+            </a>
+        </div>
+    </div>
+</body>
+</html>
